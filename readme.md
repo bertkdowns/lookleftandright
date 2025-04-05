@@ -4,7 +4,7 @@ This was a project I made in year 10 (age 14 or 15) that I thought I had lost, b
 
 I haven't changed anything, the original brief is below, as our class got us to practice writing briefs for assignments, but they didn't have to be too serious.
 
-The only thing's I've done is make a 404 page and deployed it with [Github Pages](bertkdowns.github.io/lookleftandright)
+The only things I've done is make a 404 page and deployed it with [Github Pages](bertkdowns.github.io/lookleftandright)
 
 # LOOK LEFT AND RIGHT GAME
 
