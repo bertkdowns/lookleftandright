@@ -1,0 +1,168 @@
+<title>Road Cross</title>
+
+<div style="visibility:hidden;width:0;height:0">
+    <img src="assets/character.png" id="character"/ >
+     <img src="assets/car.png" id="car"/ >
+    <img src="assets/background.png" id="background"/ >
+</div>
+<div style="display:block;margin:auto">
+<p id="text-display" style="font-family:Comic Sans MS">ARROW KEYS to control!</p>
+<div id="canvas-div"><canvas id="canvasid"></canvas></div>
+</div>
+<script>
+var canvas = document.getElementById("canvasid");
+var ctx = canvas.getContext("2d");
+canvas.width = 800;
+canvas.height = 800;
+    
+    var playerX = 390
+    var playerY = 700
+    var score = 0
+    var playerVel = 0
+    var seeLeft = false
+    var seeRight = false
+    var charImg = document.getElementById("character")
+    var carImg = document.getElementById("car")
+    var backgroundImg = document.getElementById("background")
+    var carArray = []
+    function car(x,y,direction){
+	   this.x = x
+	   this.y = y
+	   this.direction = direction
+		
+    }
+    function drawCars(){
+        for (i = 0; i < carArray.length; i++ ){
+            if (carArray[i].direction){
+                carArray[i].x += 2
+                if (carArray[i].x > 800){
+                    carArray.splice(i,1)
+                }
+            } else {
+                carArray[i].x -= 3
+                if (carArray[i].x < 0){
+                    carArray.splice(i,1)
+                }
+            }
+             
+            ctx.drawImage(carImg,carArray[i].x,carArray[i].y)
+            if (carArray[i].x > 348 && carArray[i].x < 422){
+                if (playerY > carArray[i].y -20 && playerY < carArray[i].y + 20){
+                    document.getElementById("text-display").innerHTML = "YOU DIED!! Score: " + score
+                    document.getElementById("canvas-div").innerHTML = "" 
+                }
+            }
+        }
+    }
+    function newCar(side,lane){
+        if (side == 1){
+            side = 0
+            var direction = true
+        } else {
+            side = 800
+            var direction = false
+        }
+		if (side == 0){
+        switch (lane){
+            case 1:
+                lane = 100
+                break;
+            case 2:
+                lane = 150
+                break;
+            case 3:
+                lane = 200
+                break;
+            case 4:
+                lane = 250
+                break;
+        }
+		} else {
+		switch (lane){
+            case 1:
+                lane = 500
+                break;
+            case 2:
+                lane = 350
+                break;
+            case 3:
+                lane = 400
+                break;
+            case 4:
+                lane = 450
+                break;
+        }
+		
+		
+		}
+        carArray.push(new car(side,lane,direction))
+    }
+    
+    newCar("left",3);
+
+
+    function draw(){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.drawImage(backgroundImg,0,0)
+        ctx.drawImage(charImg,playerX,playerY)
+        drawCars();
+        if(Math.floor(Math.random()*(50 - score*2)) == 0){
+            newCar(Math.floor(Math.random()*2),Math.floor(Math.random()*4+1))
+        }
+		
+		if (seeLeft){
+			
+			ctx.fillRect(440,0,360,800); // clear right
+		} else if (seeRight){
+			ctx.fillRect(0,0,360,800); //clear left
+			
+		} else {
+			ctx.fillRect(440,0,360,800); // clear right
+			ctx.fillRect(0,0,360,800); //clear left
+			playerY += playerVel;
+		}
+        if(playerY < 50){
+            playerY = 700
+            score++
+            document.getElementById("text-display").innerHTML = "Score: " + score
+        }
+	}
+    
+    
+    function keyDown(e){
+        if(e.keyCode == 38){
+            playerVel = -2
+        }
+         if(e.keyCode == 40){
+            playerVel = 2
+        }
+         if(e.keyCode == 37){
+            seeLeft = true
+        }
+         if(e.keyCode == 39){
+            
+            seeRight = true
+        }
+        
+    }
+    function keyUp(e){
+        if(e.keyCode == 37){
+            seeLeft = false
+        }
+        if(e.keyCode == 39){
+            
+            seeRight = false
+        }
+        if(e.keyCode == 38){
+            playerVel = 0
+        }
+        if(e.keyCode == 40){
+            playerVel = 0
+        }
+    }
+    
+    document.addEventListener("keydown",keyDown);
+    document.addEventListener("keyup",keyUp);
+    setInterval(draw,1000/60);
+    
+</script>
